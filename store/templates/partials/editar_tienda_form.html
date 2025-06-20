@@ -1,0 +1,50 @@
+<!-- partials/editar_tienda_form.html -->
+<form 
+      hx-post="/tienda/editar/{{ tienda.id }}/"
+      hx-target="#tienda-row-{{ tienda.id }}"
+      hx-swap="outerHTML"
+      hx-on::after-request="document.getElementById('editarTiendaModal').close()"
+      {% comment %} hx-on:after-request="if(event.detail.successful)  {% endcomment %}
+      class="m-4">
+  {% csrf_token %}
+  
+  <div class="form-control mb-4">
+    <label class="label">
+      <span class="label-text">Nombre</span>
+    </label>
+    <input type="text" 
+           name="nombre" 
+           value="{{ form.nombre.value }}" 
+           class="input input-bordered w-full">
+  </div>
+  
+  <div class="form-control mb-4">
+    <label class="label">
+      <span class="label-text">Dirección</span>
+    </label>
+    <input type="text" 
+           name="ubicacion" 
+           value="{{ form.ubicacion.value }}" 
+           class="input input-bordered w-full">
+  </div>
+  
+  <div class="form-control mb-4">
+    <label class="label">
+      <span class="label-text">Teléfono</span>
+    </label>
+    <input type="text" 
+           name="telefono" 
+           value="{{ form.telefono.value }}" 
+           class="input input-bordered w-full">
+  </div>
+  
+  <div class="modal-action">
+    <button type="button" class="btn" 
+            onclick="document.getElementById('editarTiendaModal').close()">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary">
+      Guardar Cambios
+    </button>
+  </div>
+</form>

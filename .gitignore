@@ -1,0 +1,44 @@
+# Entorno virtual
+.venv/
+venv/
+env/
+env.bak/
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos y configuraciones
+*.env
+.env
+.env.local
+.env.*.local
+
+# Base de datos (SQLite)
+*.sqlite3
+*.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos de instalación de paquetes
+pip-selfcheck.json
+Pipfile
+Pipfile.lock
+
+# Django
+/media/
+/staticfiles/
+/static_collected/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

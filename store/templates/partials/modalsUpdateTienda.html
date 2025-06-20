@@ -1,0 +1,25 @@
+<dialog id="editarTiendaModal" class="modal">
+
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Editar Tienda: {{ tienda.nombre }}</h3>
+        <form 
+            hx-post="{% url 'editar_tienda' 0 %}"
+            hx-target="#tienda-row-__id__"
+            hx-swap="outerHTML"
+            hx-on:after-request="document.getElementById('editarTiendaModal').close()"
+            class="m-4">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <div class="modal-action">
+                <button type="button" class="btn" onclick="document.getElementById('editarTiendaModal').close()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</dialog>

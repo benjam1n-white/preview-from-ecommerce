@@ -1,0 +1,20 @@
+{% for field, errors in form.errors.items %}
+    {% for error in errors %}
+        <div class="text-error text-sm">{{ error }}</div>
+    {% endfor %}
+{% endfor %}
+
+
+<!-- partials/form_errors.html -->
+<div class="text-error">
+  {% for field, errors in form.errors.items %}
+    {% for error in errors %}
+      <p class="text-red-600 font-medium mb-2">
+        {% if field != '__all__' %}
+          <strong>{{ field|title }}:</strong> 
+        {% endif %}
+        {{ error }}
+      </p>
+    {% endfor %}
+  {% endfor %}
+</div>

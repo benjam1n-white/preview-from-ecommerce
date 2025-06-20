@@ -1,0 +1,85 @@
+<form id="tienda-form"
+      hx-post="{% url 'creat' %}"
+      hx-target="#tbodyTable"
+        hx-swap = "afterbegin"
+        hx-on:success="modalsTiendaForm.close(); this.reset();"
+      class="m-4">
+    {% csrf_token %}
+    
+    <!-- Mensaje de éxito -->
+    {% if success %}
+    <div class="mb-4 p-3 bg-success/10 text-success rounded-lg">
+        ¡Tienda creada exitosamente!
+    </div>
+    {% endif %}
+    
+    <!-- Contenedor de errores generales -->
+    {% if form.non_field_errors %}
+    <div class="mb-4 p-3 bg-error/10 text-error rounded-lg">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Campo Nombre -->
+    <div class="form-control w-full mb-4">
+        <label class="label">
+            <span class="label-text">Nombre</span>
+        </label>
+        {{ form.nombre }}
+        {% if form.nombre.errors %}
+        <label class="label text-error">
+            {% for error in form.nombre.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </label>
+        {% endif %}
+    </div>
+    
+    <!-- Campo Ubicación -->
+    <div class="form-control w-full mb-4">
+        <label class="label">
+            <span class="label-text">Ubicación</span>
+        </label>
+        {{ form.ubicacion }}
+        {% if form.ubicacion.errors %}
+        <label class="label text-error">
+            {% for error in form.ubicacion.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </label>
+        {% endif %}
+    </div>
+    
+    <!-- Campo Teléfono -->
+    <div class="form-control w-full mb-6">
+        <label class="label">
+            <span class="label-text">Teléfono</span>
+        </label>
+        {{ form.telefono }}
+        {% if form.telefono.errors %}
+        <label class="label text-error">
+            {% for error in form.telefono.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </label>
+        {% endif %}
+    </div>
+    
+    <div class="modal-action">
+        <button type="button" class="btn" onclick="modalsTiendaForm.close()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Agregar Tienda</button>
+    </div>
+</form>
+
+{% comment %} {% if success %}
+<script>
+    // Cerrar modal después de 2 segundos
+    setTimeout(() => {
+        modalsTiendaForm.close();
+        // Actualizar tabla de tiendas
+        htmx.trigger('#tbodyTable', 'refresh');
+    }, 2000);
+</script>
+{% endif %} {% endcomment %}

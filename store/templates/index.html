@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <!-- Barra de Navegación -->
+    <div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+        <div class="navbar-start">
+            <!-- Menú móvil -->
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a>Tiendas</a></li>
+                    <li><a>Productos</a></li>
+                    <li><a>Contacto</a></li>
+                    <li><a>Ubicación</a></li>
+                    <li><a>Login</a></li>
+                </ul>
+            </div>
+            <!-- Logo -->
+            <a class="btn btn-ghost text-xl font-bold text-primary">ECOMMERCE</a>
+        </div>
+        
+        <!-- Navegación para escritorio -->
+        <div class="navbar-center hidden lg:flex">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn m-1">Tienda</div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a class="font-medium">Tienda 1</a></li>
+                        <li><a class="font-medium">Tienda 2</a></li>
+                    </ul>
+                </div>
+             <div class="dropdown">
+                <div tabindex="0" role="button" class="btn m-1">Productos</div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a class="font-medium">Categoria 1</a></li>
+                        <li><a class="font-medium">Categoria 2</a></li>
+                    </ul>
+                </div>
+             <div class="dropdown">
+                <div tabindex="0" role="button" class="btn m-1">Contacto</div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a class="font-medium">Contacto 1</a></li>
+                        <li><a class="font-medium">Contacto 2</a></li>
+                    </ul>
+            </div>
+             <div class="dropdown">
+                <div tabindex="0" role="button" class="btn m-1">Ubicación</div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a class="font-medium">Google Maps</a></li>
+                        
+                    </ul>
+            </div>
+             <div class="dropdown">
+                <div tabindex="0" role="button" class="btn m-1">Acceso</div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a href=" {% url 'login' %} " class="font-medium">Iniciar Sesión</a></li>
+                        <li><a href=" {% url "rqst" %} " class="font-medium">Registrarse</a></li>
+                    </ul>
+            </div>
+        </div>
+        
+        <!-- Carrito e iconos -->
+        <div class="navbar-end gap-2 relative">
+            <button class="btn btn-ghost btn-circle" id="searchButton">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+            <button class="btn btn-ghost btn-circle">
+                <div class="indicator">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    <span class="badge badge-xs badge-primary indicator-item">3</span>
+                </div>
+            </button>
+            
+            <!-- Contenedor de búsqueda -->
+            <div class="search-container" id="searchContainer">
+                <div class="p-4">
+                    <div class="relative">
+                        <input type="text" id="searchInput" class="input input-bordered w-full pl-10" placeholder="Buscar productos..." autofocus>
+                        <div class="absolute left-3 top-3 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="search-results">
+                    <table class="table table-zebra">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Disponibilidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchResults">
+                            <!-- Los resultados se cargarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección Hero -->
+    <div class="hero min-h-[500px] hero-pattern text-white">
+        <div class="hero-content flex-col lg:flex-row-reverse gap-12">
+            <img src="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="max-w-sm rounded-lg shadow-2xl" alt="Productos destacados" />
+            <div>
+                <h1 class="text-5xl font-bold">Bienvenido a ECOMMERCE</h1>
+                <p class="py-6 text-lg">Descubre nuestra increíble colección de productos de alta calidad a precios inigualables. ¡Compra con confianza y recibe envío rápido!</p>
+                <button class="btn btn-primary text-white">Explorar Productos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Categorías -->
+    <div class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-center mb-12">Categorías Populares</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Categoría 1 -->
+            <div class="card bg-base-100 shadow-xl image-full">
+                <figure><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1099&q=80" alt="Electrónicos" /></figure>
+                <div class="card-body justify-end">
+                    <h2 class="card-title text-white">Electrónicos</h2>
+                    <div class="card-actions justify-end">
+                        <button class="btn btn-primary">Ver productos</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Categoría 2 -->
+            <div class="card bg-base-100 shadow-xl image-full">
+                <figure><img src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Ropa" /></figure>
+                <div class="card-body justify-end">
+                    <h2 class="card-title text-white">Ropa</h2>
+                    <div class="card-actions justify-end">
+                        <button class="btn btn-primary">Ver productos</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Categoría 3 -->
+            <div class="card bg-base-100 shadow-xl image-full">
+                <figure><img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Hogar" /></figure>
+                <div class="card-body justify-end">
+                    <h2 class="card-title text-white">Hogar</h2>
+                    <div class="card-actions justify-end">
+                        <button class="btn btn-primary">Ver productos</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Categoría 4 -->
+            <div class="card bg-base-100 shadow-xl image-full">
+                <figure><img src="https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Deportes" /></figure>
+                <div class="card-body justify-end">
+                    <h2 class="card-title text-white">Deportes</h2>
+                    <div class="card-actions justify-end">
+                        <button class="btn btn-primary">Ver productos</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos Destacados -->
+    <div class="container mx-auto px-4 py-12 bg-base-200">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold">Productos Destacados</h2>
+            <p class="text-lg mt-2">Descubre nuestros productos más populares</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Producto 1 -->
+            <div class="card bg-base-100 shadow-xl product-card">
+                <div class="discount-badge">
+                    <span class="badge badge-primary">-20%</span>
+                </div>
+                <figure><img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80" alt="Smartwatch" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">Smartwatch Pro</h2>
+                    <p class="flex items-center">
+                        <span class="text-2xl font-bold">$129.99</span>
+                        <span class="ml-2 text-gray-500 line-through">$159.99</span>
+                    </p>
+                    <div class="rating rating-sm">
+                        <input type="radio" name="rating-1" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-1" class="mask mask-star-2 bg-orange-400" />
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <button class="btn btn-primary">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Producto 2 -->
+            <div class="card bg-base-100 shadow-xl product-card">
+                <figure><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Audífonos" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">Audífonos Inalámbricos</h2>
+                    <p class="text-2xl font-bold">$89.99</p>
+                    <div class="rating rating-sm">
+                        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" checked />
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <button class="btn btn-primary">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Producto 3 -->
+            <div class="card bg-base-100 shadow-xl product-card">
+                <figure><img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Cámara" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">Cámara Digital HD</h2>
+                    <p class="text-2xl font-bold">$249.99</p>
+                    <div class="rating rating-sm">
+                        <input type="radio" name="rating-3" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-3" class="mask mask-star-2 bg-orange-400" />
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <button class="btn btn-primary">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Producto 4 -->
+            <div class="card bg-base-100 shadow-xl product-card">
+                <div class="discount-badge">
+                    <span class="badge badge-primary">-15%</span>
+                </div>
+                <figure><img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=785&q=80" alt="Zapatillas" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">Zapatillas Deportivas</h2>
+                    <p class="flex items-center">
+                        <span class="text-2xl font-bold">$79.99</span>
+                        <span class="ml-2 text-gray-500 line-through">$94.99</span>
+                    </p>
+                    <div class="rating rating-sm">
+                        <input type="radio" name="rating-4" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-4" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-4" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-4" class="mask mask-star-2 bg-orange-400" checked />
+                        <input type="radio" name="rating-4" class="mask mask-star-2 bg-orange-400" />
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <button class="btn btn-primary">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <button class="btn btn-outline btn-primary">Ver todos los productos</button>
+        </div>
+    </div>
+
+    <!-- Beneficios -->
+    <div class=" mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl ">¿Por qué elegir ECOMMERCE?</h2>
+            <p class="text-lg mt-2">Ofrecemos la mejor experiencia de compra online</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="card bg-base-100 shadow feature-card">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl text-primary mb-4">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3 class="card-title">Envío Rápido</h3>
+                    <p>Entrega en 24-48 horas en pedidos seleccionados</p>
+                </div>
+            </div>
+            
+            <div class="card bg-base-100 shadow feature-card">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl text-primary mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="card-title">Pago Seguro</h3>
+                    <p>Protegemos tus datos con cifrado avanzado</p>
+                </div>
+            </div>
+            
+            <div class="card bg-base-100 shadow feature-card">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl text-primary mb-4">
+                        <i class="fas fa-undo"></i>
+                    </div>
+                    <h3 class="card-title">Devoluciones Fáciles</h3>
+                    <p>30 días para devoluciones sin complicaciones</p>
+                </div>
+            </div>
+            
+            <div class="card bg-base-100 shadow feature-card">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl text-primary mb-4">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="card-title">Soporte 24/7</h3>
+                    <p>Nuestro equipo está siempre disponible para ayudarte</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    <!-- Pie de página -->
+    <footer class="footer p-10 bg-base-200 text-base-content">
+        <div>
+            <span class="footer-title">ECOMMERCE</span>
+            <p>Tu tienda online de confianza<br/>Ofreciendo los mejores productos desde 2023</p>
+            <div class="flex gap-4 mt-4">
+                <a><i class="fab fa-facebook text-2xl"></i></a>
+                <a><i class="fab fa-twitter text-2xl"></i></a>
+                <a><i class="fab fa-instagram text-2xl"></i></a>
+                <a><i class="fab fa-pinterest text-2xl"></i></a>
+            </div>
+        </div> 
+        <div>
+            <span class="footer-title">Enlaces</span>
+            <a class="link link-hover">Tienda</a>
+            <a class="link link-hover">Productos</a>
+            <a class="link link-hover">Ofertas</a>
+            <a class="link link-hover">Novedades</a>
+        </div> 
+        <div>
+            <span class="footer-title">Soporte</span>
+            <a class="link link-hover">Contacto</a>
+            <a class="link link-hover">FAQs</a>
+            <a class="link link-hover">Política de devoluciones</a>
+            <a class="link link-hover">Términos de uso</a>
+        </div> 
+        <div>
+            <span class="footer-title">Boletín</span>
+            <div class="form-control w-80">
+                <label class="label">
+                    <span class="label-text">Suscríbete para recibir ofertas</span>
+                </label> 
+                <div class="relative">
+                    <input type="text" placeholder="tu@email.com" class="input input-bordered w-full pr-16" /> 
+                    <button class="btn btn-primary absolute top-0 right-0 rounded-l-none">Suscribir</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Copyright -->
+    <footer class="footer footer-center p-4 bg-base-300 text-base-content">
+        <aside>
+            <p>© 2023 ECOMMERCE. Todos los derechos reservados.</p>
+        </aside>
+    </footer>
+    
+    <script>
+        // Datos de productos para la búsqueda
+        const products = [
+            { id: 1, name: "Smartwatch Pro", category: "Electrónicos", price: 129.99, stock: 15 },
+            { id: 2, name: "Audífonos Inalámbricos", category: "Electrónicos", price: 89.99, stock: 8 },
+            { id: 3, name: "Cámara Digital HD", category: "Electrónicos", price: 249.99, stock: 5 },
+            { id: 4, name: "Zapatillas Deportivas", category: "Deportes", price: 79.99, stock: 20 },
+            { id: 5, name: "Camiseta Deportiva", category: "Ropa", price: 29.99, stock: 30 },
+            { id: 6, name: "Sofá de Cuero", category: "Hogar", price: 599.99, stock: 3 },
+            { id: 7, name: "Laptop Ultradelgada", category: "Electrónicos", price: 899.99, stock: 7 },
+            { id: 8, name: "Tablet Android", category: "Electrónicos", price: 299.99, stock: 12 },
+            { id: 9, name: "Mochila Resistentes", category: "Accesorios", price: 49.99, stock: 25 },
+            { id: 10, name: "Reloj Inteligente", category: "Electrónicos", price: 159.99, stock: 10 },
+            { id: 11, name: "Set de Cocina Premium", category: "Hogar", price: 129.99, stock: 6 },
+            { id: 12, name: "Raqueta de Tenis", category: "Deportes", price: 89.99, stock: 15 }
+        ];
+        
+        // Elementos del DOM
+        const searchButton = document.getElementById('searchButton');
+        const searchContainer = document.getElementById('searchContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        // Función para mostrar/ocultar el panel de búsqueda
+        searchButton.addEventListener('click', function() {
+            searchContainer.classList.toggle('active');
+            if (searchContainer.classList.contains('active')) {
+                searchInput.focus();
+                filterProducts(''); // Mostrar todos los productos inicialmente
+            }
+        });
+        
+        // Función para filtrar productos
+        function filterProducts(query) {
+            searchResults.innerHTML = '';
+            
+            const filteredProducts = query 
+                ? products.filter(product => 
+                    product.name.toLowerCase().includes(query.toLowerCase()) || 
+                    product.category.toLowerCase().includes(query.toLowerCase()))
+                : products;
+            
+            if (filteredProducts.length === 0) {
+                searchResults.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center py-8 text-gray-500">
+                            <i class="fas fa-search fa-2x mb-4"></i>
+                            <p>No se encontraron productos</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            filteredProducts.forEach(product => {
+                const row = document.createElement('tr');
+                const name = highlightMatch(product.name, query);
+                const category = highlightMatch(product.category, query);
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar">
+                                <div class="mask mask-squircle w-12 h-12 bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-box text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="font-bold">${name}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${category}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>
+                        <span class="badge badge-ghost badge-sm ${product.stock > 5 ? 'badge-success' : product.stock > 0 ? 'badge-warning' : 'badge-error'}">
+                            ${product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
+                        </span>
+                    </td>
+                `;
+                row.addEventListener('click', function() {
+                    alert(`Has seleccionado: ${product.name}`);
+                    searchContainer.classList.remove('active');
+                });
+                searchResults.appendChild(row);
+            });
+        }
+        
+        // Función para resaltar coincidencias en el texto
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+        
+        // Evento para filtrar productos al escribir
+        searchInput.addEventListener('input', function() {
+            filterProducts(this.value);
+        });
+        
+        // Cerrar el panel de búsqueda al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            if (!searchContainer.contains(event.target) && !searchButton.contains(event.target)) {
+                searchContainer.classList.remove('active');
+            }
+        });
+    </script>
+{% endblock  %}
+

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center p-4">
+    <div class="login-container max-w-4xl w-full">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+            <!-- Sección de ilustración -->
+            <div class="login-illustration md:w-2/5">
+                <div class="text-center">
+                    <div class="bg-white/20 p-4 rounded-full inline-block mb-6">
+                        <i class="fas fa-lock text-4xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-4">Bienvenido de nuevo</h1>
+                    <p class="mb-8 max-w-xs mx-auto">Inicia sesión para acceder a ofertas exclusivas y realizar un seguimiento de tus pedidos</p>
+                    <div class="bg-white/20 p-4 rounded-xl max-w-xs mx-auto">
+                        <div class="flex items-center mb-3">
+                            <div class="bg-green-500 text-white p-1 rounded-full mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p>Acceso rápido y seguro</p>
+                        </div>
+                        <div class="flex items-center mb-3">
+                            <div class="bg-green-500 text-white p-1 rounded-full mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p>Protección de datos garantizada</p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-green-500 text-white p-1 rounded-full mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p>Compras más rápidas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección del formulario -->
+            <div class="login-form md:w-3/5">
+                
+                <div class="card w-full bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl font-bold mb-6">Crear cuenta</h2>
+                        
+                        <form id="loginForm" method="post" action="{% url 'rqst' %}" class="space-y-4">
+                            {% csrf_token %}
+                             <!-- Username -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Nombre de usuario</span>
+                            </label>
+                            {{form.username}}
+                        </div>
+              
+                        <!-- Email -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Correo electrónico</span>
+                            </label>
+                            {{form.email}}
+                        </div>
+               
+                    <!-- Password -->
+                        <div class="floating-label ">
+                            {{form.password1}}
+                            <div class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                        </div>
+              
+                    <!-- Confirm Password -->
+                        <div class="floating-label ">
+                        {{form.password2}}
+                            <div class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                        </div>
+              
+                            
+                            <!-- Submit Button -->
+                            <div class="form-control mt-8">
+                                <button type="submit" class="btn btn-primary">
+                                    Registrarse
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Login Link -->
+                        <div class="text-center mt-4">
+                            <span class="text-sm">
+                                ¿Ya tienes cuenta?
+                                <a href="{% url "login" %}" class="link link-primary ml-1">Iniciar sesión</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <script>
+    // Solo maneja el toggle de password
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput1 = document.getElementById('password1');  
+    const passwordInput2 = document.getElementById('password2');  
+    
+    if (togglePassword && passwordInput1 && passwordInput2) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput1.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput1.setAttribute('type', type);
+            this.innerHTML = type === 'text' ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+        });
+    }
+    </script>
+{% endblock %}
