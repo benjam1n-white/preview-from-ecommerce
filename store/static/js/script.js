@@ -45,11 +45,9 @@
             target: '#editarTiendaModal .m-4',
             swap: 'innerHTML',
             onSuccess: function() {
-        // 5. Configurar el formulario con HTMX
-        const form = document.querySelector('#editarTiendaModal form');
-        if (form) {
-             // Obtener la URL correcta usando el tiendaId
-             const editUrl = `/tienda/editar/${tiendaId}/`;
+                const form = document.querySelector('#editarTiendaModal form');
+                if (form) {
+                    const editUrl = `/tienda/editar/${tiendaId}/`;
                     
                     // Asignar los atributos HTMX correctamente
                     form.setAttribute('hx-post', editUrl);
@@ -70,6 +68,7 @@
             
         });
     }
+    
      // Configuración del modal de confirmación para HTMX
     {% comment %} document.body.addEventListener('htmx:confirm', function(e) {
         e.preventDefault();
