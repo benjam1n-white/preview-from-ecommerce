@@ -70,20 +70,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-# Configuración de base de datos
+# Configuración de base de datos para Render
 if os.environ.get('RENDER'):
-    # Configuración para Render (PostgreSQL)
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True
-        )
-    }
+    # Obtiene DATABASE_URL de las variables de entorno
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    
+    if DATABASE_URL:
+        DATABASES = {
+            'default': dj_database_url.config(
+                default=DATABASE_URL,
+                conn_max_age=600,
+                conn_health_checks=True,
+                ssl_require=True
+            )
+        }
+    else:
+        # Fallback en caso de error
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            }
+        }
 else:
     # Configuración local (MySQL)
-    DATABASES = {
+     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'store',
@@ -96,6 +107,7 @@ else:
             },
         }
     }
+
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
