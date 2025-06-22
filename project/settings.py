@@ -75,6 +75,7 @@ if os.environ.get('RENDER'):
     # Configuración para Render (PostgreSQL)
     DATABASES = {
         'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True
@@ -129,6 +130,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']  # Para desarrollo
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] if os.path.exists(os.path.join(BASE_DIR,'static')) else []  
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Para producción
 
 # Configuración de WhiteNoise para archivos estáticos

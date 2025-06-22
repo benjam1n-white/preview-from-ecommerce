@@ -1,4 +1,6 @@
 #!/bin/bash
 pip install -r requirements.txt
-python manage.py collectstatic --noinput
+if [-d "static"]; then
+    python manage.py collectstatic --noinput
+fi
 python manage.py migrate
