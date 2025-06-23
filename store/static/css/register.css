@@ -1,28 +1,48 @@
- .back-to-home {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-        }
-        
-        .back-btn-mobile {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .back-to-home {
-                top: 15px;
-                left: 15px;
-            }
-            .back-btn-mobile {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
-            }
-        }
+/* register.css - Actualizado */
+.back-to-home {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.back-btn-mobile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .back-to-home {
+        top: 15px;
+        left: 15px;
+    }
+    
+    .back-btn-mobile {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    /* Optimización adicional para móviles */
+    .login-illustration {
+        padding: 0 15px;
+    }
+    
+    .login-form .card {
+        border-radius: 12px;
+    }
+    
+    .form-control input {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+    
+    .toggle-password i {
+        font-size: 14px;
+    }
+}

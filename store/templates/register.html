@@ -24,85 +24,111 @@
             </div>
         </a>
     </div>
+    <!-- SECCIÓN PARA MOSTRAR MENSAJES - AÑADIR AQUÍ -->
+{% if messages %}
+<div class="messages-container max-w-4xl mx-auto px-4 mb-6">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} shadow-lg">
+        <div>
+            {% if message.tags == 'success' %}
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            {% elif message.tags == 'error' %}
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            {% endif %}
+            <span>{{ message }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="min-h-screen flex items-center justify-center p-4">
-    <div class="login-container max-w-4xl w-full">
-        <div class="flex flex-col md:flex-row items-center justify-center gap-8">
-            <!-- Sección de ilustración -->
-            <div class="login-illustration md:w-2/5">
+    <div class="login-container w-full max-w-4xl">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+            <!-- Sección de ilustración - Optimizada para móviles -->
+            <div class="login-illustration w-full md:w-2/5 mb-6 md:mb-0">
                 <div class="text-center">
-                    <div class="bg-white/20 p-4 rounded-full inline-block mb-6">
-                        <i class="fas fa-lock text-4xl"></i>
+                    <div class="bg-white/20 p-3 md:p-4 rounded-full inline-block mb-4 md:mb-6">
+                        <i class="fas fa-lock text-2xl md:text-4xl"></i>
                     </div>
-                    <h1 class="text-3xl font-bold mb-4">Bienvenido de nuevo</h1>
-                    <p class="mb-8 max-w-xs mx-auto">Inicia sesión para acceder a ofertas exclusivas y realizar un seguimiento de tus pedidos</p>
-                    <div class="bg-white/20 p-4 rounded-xl max-w-xs mx-auto">
-                        <div class="flex items-center mb-3">
-                            <div class="bg-green-500 text-white p-1 rounded-full mr-3">
-                                <i class="fas fa-check-circle"></i>
+                    <h1 class="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Bienvenido de nuevo</h1>
+                    <p class="mb-6 md:mb-8 px-2 md:px-0">Inicia sesión para acceder a ofertas exclusivas y realizar un seguimiento de tus pedidos</p>
+                    <div class="bg-white/20 p-3 md:p-4 rounded-xl max-w-xs mx-auto">
+                        <div class="flex items-center mb-2 md:mb-3">
+                            <div class="bg-green-500 text-white p-1 rounded-full mr-2 md:mr-3">
+                                <i class="fas fa-check-circle text-xs md:text-base"></i>
                             </div>
-                            <p>Acceso rápido y seguro</p>
+                            <p class="text-sm md:text-base">Acceso rápido y seguro</p>
                         </div>
-                        <div class="flex items-center mb-3">
-                            <div class="bg-green-500 text-white p-1 rounded-full mr-3">
-                                <i class="fas fa-check-circle"></i>
+                        <div class="flex items-center mb-2 md:mb-3">
+                            <div class="bg-green-500 text-white p-1 rounded-full mr-2 md:mr-3">
+                                <i class="fas fa-check-circle text-xs md:text-base"></i>
                             </div>
-                            <p>Protección de datos garantizada</p>
+                            <p class="text-sm md:text-base">Protección de datos garantizada</p>
                         </div>
                         <div class="flex items-center">
-                            <div class="bg-green-500 text-white p-1 rounded-full mr-3">
-                                <i class="fas fa-check-circle"></i>
+                            <div class="bg-green-500 text-white p-1 rounded-full mr-2 md:mr-3">
+                                <i class="fas fa-check-circle text-xs md:text-base"></i>
                             </div>
-                            <p>Compras más rápidas</p>
+                            <p class="text-sm md:text-base">Compras más rápidas</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Sección del formulario -->
-            <div class="login-form md:w-3/5">
-                
+            <!-- Sección del formulario - Optimizada para móviles -->
+            <div class="login-form w-full md:w-3/5">
                 <div class="card w-full bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title text-2xl font-bold mb-6">Crear cuenta</h2>
+                    <div class="card-body p-4 md:p-6">
+                        <h2 class="card-title text-xl md:text-2xl font-bold mb-4 md:mb-6">Crear cuenta</h2>
                         
-                        <form id="loginForm" method="post" action="{% url 'rqst' %}" class="space-y-4">
+                        <form id="loginForm" method="post" action="{% url 'rqst' %}" class="space-y-3 md:space-y-4">
                             {% csrf_token %}
-                             <!-- Username -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">Nombre de usuario</span>
-                            </label>
-                            {{form.username}}
-                        </div>
+                            <!-- Username -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Nombre de usuario</span>
+                                </label>
+                                {{form.username}}
+                            </div>
               
-                        <!-- Email -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">Correo electrónico</span>
-                            </label>
-                            {{form.email}}
-                        </div>
+                            <!-- Email -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Correo electrónico</span>
+                                </label>
+                                {{form.email}}
+                            </div>
                
-                    <!-- Password -->
-                        <div class="floating-label ">
-                            {{form.password1}}
-                            <div class="toggle-password" id="togglePassword">
-                                <i class="fas fa-eye"></i>
+                            <!-- Password -->
+                            <div class="form-control relative">
+                                <label class="label">
+                                    <span class="label-text">Contraseña</span>
+                                </label>
+                                <div class="relative">
+                                    {{form.password1}}
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" id="togglePassword">
+                                        <i class="fas fa-eye text-gray-400"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
               
-                    <!-- Confirm Password -->
-                        <div class="floating-label ">
-                        {{form.password2}}
-                            <div class="toggle-password" id="togglePassword">
-                                <i class="fas fa-eye"></i>
+                            <!-- Confirm Password -->
+                            <div class="form-control relative">
+                                <label class="label">
+                                    <span class="label-text">Confirmar Contraseña</span>
+                                </label>
+                                <div class="relative">
+                                    {{form.password2}}
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" id="togglePassword2">
+                                        <i class="fas fa-eye text-gray-400"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-              
                             
                             <!-- Submit Button -->
-                            <div class="form-control mt-8">
-                                <button type="submit" class="btn btn-primary">
+                            <div class="form-control mt-6">
+                                <button type="submit" class="btn btn-primary py-3 md:py-3 text-base">
                                     Registrarse
                                 </button>
                             </div>
@@ -112,7 +138,7 @@
                         <div class="text-center mt-4">
                             <span class="text-sm">
                                 ¿Ya tienes cuenta?
-                                <a href="{% url "login" %}" class="link link-primary ml-1">Iniciar sesión</a>
+                                <a href="{% url 'login' %}" class="link link-primary ml-1">Iniciar sesión</a>
                             </span>
                         </div>
                     </div>
@@ -121,18 +147,31 @@
         </div>
     </div>
 </div>
- <script>
-    // Solo maneja el toggle de password
+<script>
+    // Maneja el toggle de password para ambos campos
     const togglePassword = document.getElementById('togglePassword');
+    const togglePassword2 = document.getElementById('togglePassword2');
     const passwordInput1 = document.getElementById('password1');  
     const passwordInput2 = document.getElementById('password2');  
     
-    if (togglePassword && passwordInput1 && passwordInput2) {
+    if (togglePassword && passwordInput1) {
         togglePassword.addEventListener('click', function() {
             const type = passwordInput1.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput1.setAttribute('type', type);
-            this.innerHTML = type === 'text' ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         });
     }
-    </script>
+
+    if (togglePassword2 && passwordInput2) {
+        togglePassword2.addEventListener('click', function() {
+            const type = passwordInput2.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput2.setAttribute('type', type);
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    }
+</script>
 {% endblock %}

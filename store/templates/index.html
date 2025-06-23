@@ -2,27 +2,27 @@
 
 {% block content %}
 
-    <!-- Barra de Navegación -->
-    <div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
-        <div class="navbar-start">
-            <!-- Menú móvil -->
-            <div class="dropdown">
-                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a>Tiendas</a></li>
-                    <li><a>Productos</a></li>
-                    <li><a>Contacto</a></li>
-                    <li><a>Ubicación</a></li>
-                    <li><a href=" {% url 'login' %} " >Acceso</a></li>
-                </ul>
+    <!-- Barra de Navegación - Modificado -->
+<div class="navbar bg-base-100 shadow-md sticky top-0 z-50 px-2">
+    <div class="navbar-start flex-1">
+        <!-- Menú móvil -->
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle lg:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
             </div>
-            <!-- Logo -->
-            <a class="btn btn-ghost text-xl font-bold text-primary">E-Commerce Platform</a>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a>Tiendas</a></li>
+                <li><a>Productos</a></li>
+                <li><a>Contacto</a></li>
+                <li><a>Ubicación</a></li>
+                <li><a href=" {% url 'login' %} " >Acceso</a></li>
+            </ul>
         </div>
-        
-        <!-- Navegación para escritorio -->
+        <!-- Logo - Modificado para pantallas pequeñas -->
+        <a class="btn btn-ghost text-base md:text-xl font-bold text-primary px-1 truncate">E-Commerce</a>
+    </div>
+    
+     <!-- Navegación para escritorio -->
         <div class="navbar-center hidden lg:flex">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn m-1">Tienda</div>
@@ -60,48 +60,53 @@
                     </ul>
             </div>
         </div>
+    <!-- Carrito e iconos - Modificado -->
+    <div class="navbar-end gap-1 relative">
+        <button class="btn btn-ghost btn-circle" id="searchButton">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        </button>
+        <button class="btn btn-ghost btn-circle">
+            <div class="indicator">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                <span class="badge badge-xs badge-primary indicator-item">3</span>
+            </div>
+        </button>
         
-        <!-- Carrito e iconos -->
-        <div class="navbar-end gap-2 relative">
-            <button class="btn btn-ghost btn-circle" id="searchButton">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        <!-- Contenedor de búsqueda - Modificado para responsividad -->
+        <div class="search-container fixed inset-0 md:absolute md:top-full md:right-0 md:w-[400px] md:mt-2 bg-white md:shadow-lg md:rounded-box hidden" id="searchContainer">
+            <button class="btn btn-ghost btn-circle absolute top-4 right-4 z-10" id="closeSearch">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
-            <button class="btn btn-ghost btn-circle">
-                <div class="indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    <span class="badge badge-xs badge-primary indicator-item">3</span>
-                </div>
-            </button>
-            
-            <!-- Contenedor de búsqueda -->
-            <div class="search-container" id="searchContainer">
-                <div class="p-4">
-                    <div class="relative">
-                        <input type="text" id="searchInput" class="input input-bordered w-full pl-10" placeholder="Buscar productos..." autofocus>
-                        <div class="absolute left-3 top-3 text-gray-400">
-                            <i class="fas fa-search"></i>
-                        </div>
+            <div class="p-4 pt-16">
+                <div class="relative">
+                    <input type="text" id="searchInput" class="input input-bordered w-full pl-10" placeholder="Buscar productos..." autofocus>
+                    <div class="absolute left-3 top-3 text-gray-400">
+                        <i class="fas fa-search"></i>
                     </div>
                 </div>
-                
-                <div class="search-results">
-                    <table class="table table-zebra">
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Categoría</th>
-                                <th>Precio</th>
-                                <th>Disponibilidad</th>
-                            </tr>
-                        </thead>
-                        <tbody id="searchResults">
-                            <!-- Los resultados se cargarán aquí dinámicamente -->
-                        </tbody>
-                    </table>
-                </div>
+            </div>
+            
+            <div class="search-results max-h-[60vh] overflow-y-auto px-4 pb-4">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Disponibilidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchResults">
+                        <!-- Los resultados se cargarán aquí dinámicamente -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Sección Hero -->
     <div class="hero min-h-[500px] hero-pattern text-white">
@@ -392,7 +397,7 @@
         
         // Función para mostrar/ocultar el panel de búsqueda
         searchButton.addEventListener('click', function() {
-            searchContainer.classList.toggle('active');
+            //searchContainer.classList.toggle('active');
             if (searchContainer.classList.contains('active')) {
                 searchInput.focus();
                 filterProducts(''); // Mostrar todos los productos inicialmente
@@ -474,6 +479,31 @@
                 searchContainer.classList.remove('active');
             }
         });
+
+
+
+        // Actualizar el script para manejar el nuevo contenedor
+searchButton.addEventListener('click', function() {
+    searchContainer.classList.remove('hidden');
+    searchInput.focus();
+    filterProducts('');
+});
+
+// Agregar funcionalidad al botón de cerrar
+const closeSearch = document.getElementById('closeSearch');
+closeSearch.addEventListener('click', function() {
+    searchContainer.classList.add('hidden');
+});
+
+// Cerrar al hacer clic fuera del contenedor
+document.addEventListener('click', function(event) {
+    if (!searchContainer.contains(event.target) && 
+        !searchButton.contains(event.target) &&
+        !searchContainer.classList.contains('hidden')) {
+        searchContainer.classList.add('hidden');
+    }
+});
+
     </script>
 {% endblock  %}
 

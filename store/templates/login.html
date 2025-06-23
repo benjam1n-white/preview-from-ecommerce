@@ -125,7 +125,8 @@
                             <p class="text-gray-500">Ingresa a tu cuenta ECOMMERCE</p>
                         </div>
                         
-                        <form id="loginForm" class="space-y-6">
+                        <form id="loginForm" method="post" action="{% url 'login' %}" class="space-y-6">
+                            {% csrf_token %}
                             <div class="form-control">
                                 <div class="relative">
                                     {{ form.username }}

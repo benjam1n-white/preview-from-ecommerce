@@ -252,23 +252,27 @@ class Protected(LoginRequiredMixin, View,):
             pass
         
         return min(max(level, 0), 4) 
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.email = form.cleaned_data['email'].lower()
-            user.save()
+            # GUARDAR DIRECTAMENTE SIN commit=False
+            user = form.save()
             
-            # Autenticar sin contraseña en sesión (mejor práctica)
+            # Autenticar al usuario
             auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, 'Registro exitoso!')
-            return redirect('index')  # Redirigir a página segura
+            return redirect('index')  # Redirigir a página principal
         else:
-            messages.error(request, 'Corrige los errores a continuación.')
+            # Mostrar errores de validación
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
     else:
         form = CustomUserCreationForm()
     
     return render(request, 'register.html', {'form': form})
+
 
     
