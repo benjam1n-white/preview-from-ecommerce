@@ -1,0 +1,11 @@
+<dialog id="modalsRegisterUser" class="modal">
+    <div class="modal-box w-11/12 max-w-3xl">
+        <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="modalsRegisterUser.close()">✕</button>
+        <h3 class="font-bold text-lg">Nuevo Usuario</h3>
+        <div id="notification-area"></div>
+        <!-- Contenedor dinámico -->
+        <div id="modal-content-register">
+            {% include 'partials/user_register.html' %}
+        </div>
+    </div>
+</dialog>

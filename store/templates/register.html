@@ -77,13 +77,17 @@
             </div>
 
             <!-- Sección del formulario - Optimizada para móviles -->
-            <div class="login-form w-full md:w-3/5">
+            <div  class="login-form w-full md:w-3/5">
                 <div class="card w-full bg-base-100 shadow-xl">
                     <div class="card-body p-4 md:p-6">
                         <h2 class="card-title text-xl md:text-2xl font-bold mb-4 md:mb-6">Crear cuenta</h2>
                         
-                        <form id="loginForm" method="post" action="{% url 'rqst' %}" class="space-y-3 md:space-y-4">
+                        <form id="loginForm" 
+                            hx-post="{% url "sqrt" %}"
+                            hx-target= "#loginForm "
+                            class="space-y-3 md:space-y-4">
                             {% csrf_token %}
+                        
                             <!-- Username -->
                             <div class="form-control">
                                 <label class="label">

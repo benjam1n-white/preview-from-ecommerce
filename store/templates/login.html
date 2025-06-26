@@ -163,7 +163,7 @@
                                 </div>
                                 <a href="#" class="text-primary hover:underline text-sm">¿Olvidaste tu contraseña?</a>
                             </div>
-                            
+                             <input type="hidden" name="next" value="{{ request.GET.next }}">
                             <button type="submit" class="btn btn-primary w-full py-3 text-lg font-medium">
                                 Iniciar Sesión
                             </button>
@@ -181,7 +181,7 @@
                         </div>
                         
                         <div class="text-center">
-                            <p class="text-gray-600">¿No tienes una cuenta? <a href="{% url "rqst" %}" class="text-primary font-medium hover:underline">Regístrate</a></p>
+                            <p class="text-gray-600">¿No tienes una cuenta? <a href="{% url "sqrt" %}" class="text-primary font-medium hover:underline">Regístrate</a></p>
                         </div>
                     </div>
                 </div>

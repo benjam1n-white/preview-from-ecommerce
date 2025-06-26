@@ -1,114 +1,107 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock  %}
 {% block content %}
-
-    <!-- Barra de Navegación - Modificado -->
-<div class="navbar bg-base-100 shadow-md sticky top-0 z-50 px-2">
-    <div class="navbar-start flex-1">
-        <!-- Menú móvil -->
-        <div class="dropdown">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-circle lg:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-            </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a>Tiendas</a></li>
-                <li><a>Productos</a></li>
-                <li><a>Contacto</a></li>
-                <li><a>Ubicación</a></li>
-                <li><a href=" {% url 'login' %} " >Acceso</a></li>
-            </ul>
+<!-- Plantilla para el menú de usuario autenticado (desktop) -->
+<template id="authenticated-desktop-template">
+    <div class="dropdown dropdown-end">
+        <!-- Botón de avatar (FALTABA ESTE ELEMENTO) -->
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+            <span class="text-xl font-bold text-primary">${userInitials}</span>
         </div>
-        <!-- Logo - Modificado para pantallas pequeñas -->
-        <a class="btn btn-ghost text-base md:text-xl font-bold text-primary px-1 truncate">E-Commerce</a>
+        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+            <li class="px-4 py-2 border-b">
+                <span class="font-bold">${username}</span>
+                <span class="text-sm">${email}</span>
+            </li>
+            <li><a href="#"><i class="fas fa-user mr-2"></i> Mi Perfil</a></li>
+            <li><a href="#"><i class="fas fa-shopping-bag mr-2"></i> Mis Pedidos</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión</a></li>
+        </ul>
     </div>
-    
-     <!-- Navegación para escritorio -->
-        <div class="navbar-center hidden lg:flex">
-            <div class="dropdown">
-                <div tabindex="0" role="button" class="btn m-1">Tienda</div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li><a class="font-medium">Tienda 1</a></li>
-                        <li><a class="font-medium">Tienda 2</a></li>
-                    </ul>
-                </div>
-             <div class="dropdown">
-                <div tabindex="0" role="button" class="btn m-1">Productos</div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li><a class="font-medium">Categoria 1</a></li>
-                        <li><a class="font-medium">Categoria 2</a></li>
-                    </ul>
-                </div>
-             <div class="dropdown">
-                <div tabindex="0" role="button" class="btn m-1">Contacto</div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li><a class="font-medium">04120523790</a></li>
-                        <li><a class="font-medium">Contacto 2</a></li>
-                    </ul>
-            </div>
-             <div class="dropdown">
-                <div tabindex="0" role="button" class="btn m-1">Ubicación</div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li><a class="font-medium">Google Maps</a></li>
-                        
-                    </ul>
-            </div>
-             <div class="dropdown">
-                <div tabindex="0" role="button" class="btn m-1">Acceso</div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li><a href=" {% url 'login' %} " class="font-medium">Iniciar Sesión</a></li>
-                        <li><a href=" {% url "rqst" %} " class="font-medium">Registrarse</a></li>
-                    </ul>
-            </div>
+</template>
+
+
+<!-- Plantilla para el menú de usuario autenticado (mobile) -->
+<template id="authenticated-mobile-template">
+    <div class="mt-4 pt-4 border-t border-gray-200">
+        <div class="px-4 py-2 mb-3">
+            <span class="font-bold block">${username}</span>
+            <span class="text-sm text-gray-600">${email}</span>
         </div>
-    <!-- Carrito e iconos - Modificado -->
-    <div class="navbar-end gap-1 relative">
-        <button class="btn btn-ghost btn-circle" id="searchButton">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-        </button>
-        <button class="btn btn-ghost btn-circle">
-            <div class="indicator">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                <span class="badge badge-xs badge-primary indicator-item">3</span>
-            </div>
-        </button>
-        
-        <!-- Contenedor de búsqueda - Modificado para responsividad -->
-        <div class="search-container fixed inset-0 md:absolute md:top-full md:right-0 md:w-[400px] md:mt-2 bg-white md:shadow-lg md:rounded-box hidden" id="searchContainer">
-            <button class="btn btn-ghost btn-circle absolute top-4 right-4 z-10" id="closeSearch">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <div class="p-4 pt-16">
-                <div class="relative">
-                    <input type="text" id="searchInput" class="input input-bordered w-full pl-10" placeholder="Buscar productos..." autofocus>
-                    <div class="absolute left-3 top-3 text-gray-400">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="search-results max-h-[60vh] overflow-y-auto px-4 pb-4">
-                <table class="table table-zebra">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Categoría</th>
-                            <th>Precio</th>
-                            <th>Disponibilidad</th>
-                        </tr>
-                    </thead>
-                    <tbody id="searchResults">
-                        <!-- Los resultados se cargarán aquí dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100">
+            <i class="fas fa-user mr-2"></i> Mi Perfil
+        </a>
+        <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100">
+            <i class="fas fa-shopping-bag mr-2"></i> Mis Pedidos
+        </a>
+        <a href="{% url 'logout' %}" class="nav-link py-2 px-4 hover:bg-gray-100 text-red-600">
+            <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+        </a>
     </div>
-</div>
+</template>
 
+   <!-- Barra de Navegación -->
+    <nav class="navbar bg-white sticky top-0 z-50 px-4 py-3">
+        <div class="flex items-center justify-between w-full">
+            <!-- Logo / Home -->
+            <div class="flex items-center">
+                <a href="#" class="flex items-center">
+                    <i class="fas fa-store text-blue-600 text-2xl mr-2"></i>
+                    <span class="text-xl font-bold text-blue-600">E-commerce</span>
+                </a>
+            </div>
 
-    <!-- Sección Hero -->
+            <!-- Menú para escritorio -->
+            <div class="hidden lg:flex items-center space-x-1">
+                <a href="#" class="nav-link text-gray-700 hover:text-blue-600 active">Tiendas</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-blue-600">Productos</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-blue-600">Contactos</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-blue-600">Ubicación</a>
+            </div>
+
+            <!-- Botones de autenticación para escritorio -->
+            <div id="desktop-auth-section" class="hidden lg:flex items-center space-x-3">
+                <button class="auth-btn btn btn-outline btn-primary" onclick="modalsRegisterUser.showModal()" >
+                    <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
+                </button>
+                <button class="auth-btn btn btn-primary" >
+                    <i class="fas fa-sign-in-alt mr-2"></i> <a href="{% url "login" %}">Iniciar Sesión</a> 
+                </button>
+            </div>
+
+            <!-- Menú móvil (hamburguesa) -->
+            <div class="lg:hidden flex items-center">
+                <button id="mobile-menu-button" class="btn btn-ghost btn-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú desplegable para móviles -->
+        <div id="mobile-menu" class="mobile-menu lg:hidden bg-white mt-2 rounded-lg shadow-lg">
+            <div class="px-4 py-3 flex flex-col space-y-3">
+                <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100 active">Tiendas</a>
+                <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100">Productos</a>
+                <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100">Contactos</a>
+                <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100">Ubicación</a>
+                
+                <div id="mobile-auth-section" class="mt-4 pt-4 border-t border-gray-200 flex flex-col space-y-3">
+                    <button class="auth-btn btn btn-outline btn-primary" onclick="modalsRegisterUser.showModal()">
+                        <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
+                    </button>
+                    <button class="auth-btn btn btn-primary" onclick="openLoginModal()">
+                        <i class="fas fa-sign-in-alt mr-2"></i> <a href="{% url "login" %}">Iniciar Sesión</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+ <!-- Sección Hero -->
     <div class="hero min-h-[500px] hero-pattern text-white">
         <div class="hero-content flex-col lg:flex-row-reverse gap-12">
             <img src="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="max-w-sm rounded-lg shadow-2xl" alt="Productos destacados" />
@@ -119,7 +112,41 @@
             </div>
         </div>
     </div>
+    <!-- Contenido principal -->
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Bienvenido a nuestra tienda</h1>
+            <p class="text-lg text-gray-600">Explora nuestros productos y servicios con la mejor experiencia de usuario</p>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                <div class="text-blue-600 text-4xl mb-4">
+                    <i class="fas fa-store"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Variedad de Tiendas</h3>
+                <p class="text-gray-600">Descubre nuestras tiendas especializadas en diferentes categorías de productos.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                <div class="text-blue-600 text-4xl mb-4">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Amplio Catálogo</h3>
+                <p class="text-gray-600">Encuentra miles de productos de alta calidad a precios competitivos.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                <div class="text-blue-600 text-4xl mb-4">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Entrega Rápida</h3>
+                <p class="text-gray-600">Recibe tus pedidos en 24-48 horas con nuestro servicio premium.</p>
+            </div>
+        </div>
+    </div>
+    
+    
     <!-- Sección de Categorías -->
     <div class="container mx-auto px-4 py-12">
         <h2 class="text-3xl font-bold text-center mb-12">Categorías Populares</h2>
@@ -321,189 +348,226 @@
             </div>
         </div>
     </div>
+<dialog id="modalsRegisterUser" class="modal">
+    <div class="modal-box w-11/12 max-w-3xl">
+        {% comment %} <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="modalsRegisterUser.close()">✕</button> {% endcomment %}
+        <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="modalsRegisterUser.close(); resetRegisterModal();">✕</button>
 
-    
-
-
-    <!-- Pie de página -->
-    <footer class="footer p-10 bg-base-200 text-base-content">
-        <div>
-            <span class="footer-title">ECOMMERCE</span>
-            <p>Tu tienda online de confianza<br/>Ofreciendo los mejores productos desde 2023</p>
-            <div class="flex gap-4 mt-4">
-                <a><i class="fab fa-facebook text-2xl"></i></a>
-                <a><i class="fab fa-twitter text-2xl"></i></a>
-                <a><i class="fab fa-instagram text-2xl"></i></a>
-                <a><i class="fab fa-pinterest text-2xl"></i></a>
-            </div>
-        </div> 
-        <div>
-            <span class="footer-title">Enlaces</span>
-            <a class="link link-hover">Tienda</a>
-            <a class="link link-hover">Productos</a>
-            <a class="link link-hover">Ofertas</a>
-            <a class="link link-hover">Novedades</a>
-        </div> 
-        <div>
-            <span class="footer-title">Soporte</span>
-            <a class="link link-hover">Contacto</a>
-            <a class="link link-hover">FAQs</a>
-            <a class="link link-hover">Política de devoluciones</a>
-            <a class="link link-hover">Términos de uso</a>
-        </div> 
-        <div>
-            <span class="footer-title">Boletín</span>
-            <div class="form-control w-80">
-                <label class="label">
-                    <span class="label-text">Suscríbete para recibir ofertas</span>
-                </label> 
-                <div class="relative">
-                    <input type="text" placeholder="tu@email.com" class="input input-bordered w-full pr-16" /> 
-                    <button class="btn btn-primary absolute top-0 right-0 rounded-l-none">Suscribir</button>
-                </div>
+        <h3 class="font-bold text-lg">Nuevo Usuario</h3>
+        
+        <!-- Contenedor dinámico -->
+        <div id="modal-content-register">
+            {% include 'partials/user_register.html' %}
+        </div>
+    </div>
+</dialog>  
+<!-- Pie de página -->
+<footer class="footer p-10 bg-base-200 text-base-content">
+    <div>
+        <span class="footer-title">ECOMMERCE</span>
+        <p>Tu tienda online de confianza<br/>Ofreciendo los mejores productos desde 2023</p>
+        <div class="flex gap-4 mt-4">
+            <a><i class="fab fa-facebook text-2xl"></i></a>
+            <a><i class="fab fa-twitter text-2xl"></i></a>
+            <a><i class="fab fa-instagram text-2xl"></i></a>
+            <a><i class="fab fa-pinterest text-2xl"></i></a>
+        </div>
+    </div> 
+    <div>
+        <span class="footer-title">Enlaces</span>
+        <a class="link link-hover">Tienda</a>
+        <a class="link link-hover">Productos</a>
+        <a class="link link-hover">Ofertas</a>
+        <a class="link link-hover">Novedades</a>
+    </div> 
+    <div>
+        <span class="footer-title">Soporte</span>
+        <a class="link link-hover">Contacto</a>
+        <a class="link link-hover">FAQs</a>
+        <a class="link link-hover">Política de devoluciones</a>
+        <a class="link link-hover">Términos de uso</a>
+    </div> 
+    <div>
+        <span class="footer-title">Boletín</span>
+        <div class="form-control w-80">
+            <label class="label">
+                <span class="label-text">Suscríbete para recibir ofertas</span>
+            </label> 
+            <div class="relative">
+                <input type="text" placeholder="tu@email.com" class="input input-bordered w-full pr-16" /> 
+                <button class="btn btn-primary absolute top-0 right-0 rounded-l-none">Suscribir</button>
             </div>
         </div>
-    </footer>
-    
+    </div>
+</footer>
     <!-- Copyright -->
-    <footer class="footer footer-center p-4 bg-base-300 text-base-content">
-        <aside>
-            <p>© 2023 ECOMMERCE. Todos los derechos reservados.</p>
-        </aside>
-    </footer>
-    
-    <script>
-        // Datos de productos para la búsqueda
-        const products = [
-            { id: 1, name: "Smartwatch Pro", category: "Electrónicos", price: 129.99, stock: 15 },
-            { id: 2, name: "Audífonos Inalámbricos", category: "Electrónicos", price: 89.99, stock: 8 },
-            { id: 3, name: "Cámara Digital HD", category: "Electrónicos", price: 249.99, stock: 5 },
-            { id: 4, name: "Zapatillas Deportivas", category: "Deportes", price: 79.99, stock: 20 },
-            { id: 5, name: "Camiseta Deportiva", category: "Ropa", price: 29.99, stock: 30 },
-            { id: 6, name: "Sofá de Cuero", category: "Hogar", price: 599.99, stock: 3 },
-            { id: 7, name: "Laptop Ultradelgada", category: "Electrónicos", price: 899.99, stock: 7 },
-            { id: 8, name: "Tablet Android", category: "Electrónicos", price: 299.99, stock: 12 },
-            { id: 9, name: "Mochila Resistentes", category: "Accesorios", price: 49.99, stock: 25 },
-            { id: 10, name: "Reloj Inteligente", category: "Electrónicos", price: 159.99, stock: 10 },
-            { id: 11, name: "Set de Cocina Premium", category: "Hogar", price: 129.99, stock: 6 },
-            { id: 12, name: "Raqueta de Tenis", category: "Deportes", price: 89.99, stock: 15 }
-        ];
-        
-        // Elementos del DOM
-        const searchButton = document.getElementById('searchButton');
-        const searchContainer = document.getElementById('searchContainer');
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
-        
-        // Función para mostrar/ocultar el panel de búsqueda
-        searchButton.addEventListener('click', function() {
-            //searchContainer.classList.toggle('active');
-            if (searchContainer.classList.contains('active')) {
-                searchInput.focus();
-                filterProducts(''); // Mostrar todos los productos inicialmente
-            }
-        });
-        
-        // Función para filtrar productos
-        function filterProducts(query) {
-            searchResults.innerHTML = '';
-            
-            const filteredProducts = query 
-                ? products.filter(product => 
-                    product.name.toLowerCase().includes(query.toLowerCase()) || 
-                    product.category.toLowerCase().includes(query.toLowerCase()))
-                : products;
-            
-            if (filteredProducts.length === 0) {
-                searchResults.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="text-center py-8 text-gray-500">
-                            <i class="fas fa-search fa-2x mb-4"></i>
-                            <p>No se encontraron productos</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            filteredProducts.forEach(product => {
-                const row = document.createElement('tr');
-                const name = highlightMatch(product.name, query);
-                const category = highlightMatch(product.category, query);
-                
-                row.innerHTML = `
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar">
-                                <div class="mask mask-squircle w-12 h-12 bg-gray-200 flex items-center justify-center">
-                                    <i class="fas fa-box text-gray-500"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="font-bold">${name}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${category}</td>
-                    <td>$${product.price.toFixed(2)}</td>
-                    <td>
-                        <span class="badge badge-ghost badge-sm ${product.stock > 5 ? 'badge-success' : product.stock > 0 ? 'badge-warning' : 'badge-error'}">
-                            ${product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
-                        </span>
-                    </td>
-                `;
-                row.addEventListener('click', function() {
-                    alert(`Has seleccionado: ${product.name}`);
-                    searchContainer.classList.remove('active');
-                });
-                searchResults.appendChild(row);
+<footer class="footer footer-center p-4 bg-base-300 text-base-content">
+    <aside>
+        <p>© 2023 ECOMMERCE. Todos los derechos reservados.</p>
+    </aside>
+</footer>
+<script>
+    initPasswordToggles()
+     // Funcionalidad de la barra de navegación
+        document.addEventListener('DOMContentLoaded', () => {
+            // Toggle del menú móvil
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('open');
             });
-        }
-        
-        // Función para resaltar coincidencias en el texto
-        function highlightMatch(text, query) {
-            if (!query) return text;
-            
-            const regex = new RegExp(`(${query})`, 'gi');
-            return text.replace(regex, '<span class="search-highlight">$1</span>');
-        }
-        
-        // Evento para filtrar productos al escribir
-        searchInput.addEventListener('input', function() {
-            filterProducts(this.value);
-        });
-        
-        // Cerrar el panel de búsqueda al hacer clic fuera
-        document.addEventListener('click', function(event) {
-            if (!searchContainer.contains(event.target) && !searchButton.contains(event.target)) {
-                searchContainer.classList.remove('active');
-            }
+
+            // Cerrar menú móvil al hacer clic en un enlace
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.remove('open');
+                });
+            });
         });
 
+         //JS DEFINIDO
+    const initialModalContent = document.getElementById('modal-content-register').innerHTML;
 
+    function resetRegisterModal() {
+        document.getElementById('modal-content-register').innerHTML = initialModalContent;
+        initPasswordToggles();
+    }
 
-        // Actualizar el script para manejar el nuevo contenedor
-searchButton.addEventListener('click', function() {
-    searchContainer.classList.remove('hidden');
-    searchInput.focus();
-    filterProducts('');
-});
+    // Inicializar toggles de contraseña
+    function initPasswordToggles() {
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const container = this.closest('.relative');
+                const input = container.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+    }
 
-// Agregar funcionalidad al botón de cerrar
-const closeSearch = document.getElementById('closeSearch');
-closeSearch.addEventListener('click', function() {
-    searchContainer.classList.add('hidden');
-});
-
-// Cerrar al hacer clic fuera del contenedor
-document.addEventListener('click', function(event) {
-    if (!searchContainer.contains(event.target) && 
-        !searchButton.contains(event.target) &&
-        !searchContainer.classList.contains('hidden')) {
-        searchContainer.classList.add('hidden');
+// Reemplazar el evento existente
+document.body.addEventListener('registrationSuccess', (event) => {
+    const { userAuthenticated, userData } = event.detail;
+    
+    if (userAuthenticated) {
+        updateAuthUI(userData);
+        showNotification(`¡Bienvenido ${userData.first_name || userData.username}!`, 'success');
     }
 });
 
-    </script>
+
+
+
+// Mostrar notificación
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-md shadow-lg`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button class="btn btn-sm btn-circle" onclick="this.parentElement.remove()">✕</button>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 5000);
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    // Manejar cierre del modal
+    modalsRegisterUser.addEventListener('close', () => {
+        // Resetear formulario al cerrar
+        const form = document.getElementById('register-form');
+        if (form) form.reset();
+        
+        // Restaurar contenido original
+        htmx.ajax('GET', '{% url "sqrt" %}', {
+            target: '#modal-content-register',
+            swap: 'innerHTML'
+        });
+    });
+});
+// Dentro del script existente
+/*
+function updateAuthUI(userData) {
+    // 1. Actualizar sección desktop authenticated-desktop-template
+    const desktopTemplate = document.getElementById('authenticated-desktop-template').innerHTML;
+    const desktopHtml = desktopTemplate 
+        .replace('${username}', userData.username)
+        .replace('${email}', userData.email);
+    
+    document.getElementById('desktop-auth-section').innerHTML = desktopHtml;
+    
+    // 2. Actualizar sección mobile
+    const mobileTemplate = document.getElementById('authenticated-mobile-template').innerHTML;
+    const mobileHtml = mobileTemplate
+        .replace('${username}', userData.username)
+        .replace('${email}', userData.email);
+    
+    document.getElementById('mobile-auth-section').innerHTML = mobileHtml;
+    
+    // 3. Actualizar mensaje de bienvenida
+    const welcomeSection = document.querySelector('.hero-content');
+    if (welcomeSection) {
+        welcomeSection.querySelector('h1').textContent = `¡Bienvenido ${userData.first_name || userData.username}!`;
+    }
+    
+    // 4. Cerrar modal de registro
+    modalsRegisterUser.close();
+}
+
+function getInitials(name) {
+    return name.split(' ')
+        .map(part => part[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+}
+*/
+function updateAuthUI(userData) {
+    // Obtener iniciales del usuario
+    const initials = getInitials(userData.first_name || userData.username);
+    
+    // 1. Actualizar sección desktop
+    const desktopTemplate = document.getElementById('authenticated-desktop-template').innerHTML;
+    const desktopHtml = desktopTemplate
+        .replace('${userInitials}', initials)
+        .replace('${username}', userData.username)
+        .replace('${email}', userData.email);
+    
+    document.getElementById('desktop-auth-section').innerHTML = desktopHtml;
+    
+    // 2. Actualizar sección mobile
+    const mobileTemplate = document.getElementById('authenticated-mobile-template').innerHTML;
+    const mobileHtml = mobileTemplate
+        .replace('${username}', userData.username)
+        .replace('${email}', userData.email);
+    
+    document.getElementById('mobile-auth-section').innerHTML = mobileHtml;
+    
+    // 3. Actualizar mensaje de bienvenida
+    const welcomeSection = document.querySelector('.hero-content');
+    if (welcomeSection) {
+        welcomeSection.querySelector('h1').textContent = `¡Bienvenido ${userData.first_name || userData.username}!`;
+    }
+    
+    // 4. Cerrar modal de registro
+    modalsRegisterUser.close();
+}
+
+// Función para obtener iniciales - Asegurarse que existe
+function getInitials(name) {
+    return name.split(' ')
+        .map(part => part[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+}
+
+</script>
 {% endblock  %}
 

@@ -35,21 +35,21 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.TextInput(attrs={
             'class': 'input input-bordered w-full',
             'placeholder': 'Nombre de usuario',
-            'id': 'username'
+            'id': 'username','autocomplete':'new-password'
         })
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'input input-bordered  w-full',
+            'class': 'input input-bordered  w-full ',
             'placeholder': 'Contraseña',
-            'id': 'password1'
+            'id': 'password1','autocomplete':'new-password'
         })
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'input input-bordered  w-full',
             'placeholder': 'Confirmar Contraseñas',
-            'id': 'password2'
+            'id': 'password2','autocomplete':'new-password'
         })
     )
     

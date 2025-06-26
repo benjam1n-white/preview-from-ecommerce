@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login,logout
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -15,7 +16,8 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-
+import json
+from django.urls import reverse_lazy
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class TiendaDeleteView(View):
@@ -106,7 +108,7 @@ def tienda_create(request):
         form = TiendaForm()
         return render(request, 'partials/tienda_form.html', {'form': form})
     
-    # Manejar solicitudes POST (procesar formulario)
+    
     if request.method == 'POST':
         form = TiendaForm(request.POST)
         if form.is_valid():
@@ -133,9 +135,11 @@ def tienda_create(request):
     return HttpResponse("Método no permitido", status=405)
 
 
-
 def index(request):
-    return render(request, 'index.html')
+    context = {'form':CustomUserCreationForm()}
+    if request.user.is_authenticated:
+        context['is_authenticated'] = True
+    return render(request, 'index.html', context)
 
 def login(request):
     if request.method == 'POST':
@@ -257,22 +261,25 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            # GUARDAR DIRECTAMENTE SIN commit=False
             user = form.save()
+            auth_login(request, user)
             
-            # Autenticar al usuario
-            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            messages.success(request, 'Registro exitoso!')
-            return redirect('index')  # Redirigir a página principal
+            # Crear datos adicionales para la UI
+            user_data = {
+                'username': user.username,
+                'email': user.email,
+                
+            }
+            
+            response = HttpResponse(status=204)
+            response['HX-Trigger'] = json.dumps({
+                "registrationSuccess": {
+                    "userAuthenticated": True,
+                    "userData": user_data
+                }
+            })
+            return response
         else:
-            # Mostrar errores de validación
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-    else:
-        form = CustomUserCreationForm()
+            return render(request, 'partials/user_register.html', {'form': form})
     
-    return render(request, 'register.html', {'form': form})
-
-
-    
+    return HttpResponse("Método no permitido", status=405)
