@@ -1,5 +1,5 @@
 <form id="tienda-form"
-      hx-post="{% url 'Nueva' %}"
+      hx-post="{% url 'creat' %}"
       hx-target="#tbodyTable"
         hx-swap = "afterbegin"
         hx-on:success="modalsTiendaForm.close(); this.reset();"
