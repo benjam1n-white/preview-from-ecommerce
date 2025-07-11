@@ -9,15 +9,15 @@ from django.utils.translation import gettext_lazy as _
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'floating-input input input-bordered w-full pl-10 pr-4 py-3',
-            'placeholder': '',
-            'id': 'username'
+            'class': 'input input-bordered w-full',
+            'placeholder': 'tu@email.com',
+            'id': 'username', 
         })
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'floating-input input input-bordered w-full pl-10 pr-10 py-3',
-            'placeholder': 'Contraseña',
+            'class': 'input input-bordered w-full',
+            'placeholder': '••••••••',
             'id': 'password',
             'type': 'password'
         })
@@ -40,14 +40,14 @@ class CustomUserCreationForm(UserCreationForm):
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'input input-bordered  w-full ',
+            'class': 'input input-bordered  w-full password-toggle',
             'placeholder': 'Contraseña',
             'id': 'password1','autocomplete':'new-password'
         })
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'input input-bordered  w-full',
+            'class': 'input input-bordered  w-full password-toggle',
             'placeholder': 'Confirmar Contraseñas',
             'id': 'password2','autocomplete':'new-password'
         })

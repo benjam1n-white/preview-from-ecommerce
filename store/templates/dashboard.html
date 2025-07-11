@@ -22,7 +22,18 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box w-52">
                     <li><a>Perfil</a></li>
                     <li><a>Configuración</a></li>
-                    <li><a>Cerrar sesión</a></li>
+                    <li>
+                            <button hx-post="{% url 'logout' %}"
+                            hx-target="body"
+                            hx-indicator="#logout-indicator"
+                            class="btn btn-ghost text-error">
+                            <span class="flex items-center gap-2">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar sesión
+                                <span id="logout-indicator" class="loading loading-spinner htmx-indicator"></span>
+                            </span>
+                            </button>
+                        </li>
                 </ul>
             </div>
         </div>
@@ -85,7 +96,19 @@
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box w-52">
                         <li><a>Perfil</a></li>
                         <li><a>Configuración</a></li>
-                        <li><a>Cerrar sesión</a></li>
+                        <li>
+                            <button hx-post="{% url 'logout' %}"
+                            hx-target="body"
+                            hx-indicator="#logout-indicator"
+                            class="btn btn-ghost text-error">
+                            <span class="flex items-center gap-2">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar sesión
+                                <span id="logout-indicator" class="loading loading-spinner htmx-indicator"></span>
+                            </span>
+                            </button>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -385,7 +408,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
+ document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = "{{ csrf_token }}";
+    });
 </script>
 
 

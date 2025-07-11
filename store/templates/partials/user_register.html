@@ -1,11 +1,13 @@
-<form id="register-form"
-    hx-post="{% url 'sqrt' %}"
-    hx-target="#modal-content-register"
-    hx-swap="innerHTML"
-    class="space-y-3 md:space-y-4">
-    
-    {% csrf_token %}
-    
+<button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="registerModal.close(); resetRegisterModal();">✕</button>
+            <h3 class="font-bold text-xl text-blue-600 mb-4">
+                <i class="fas fa-user-plus mr-2"></i>Crear Cuenta
+            </h3>
+    <form id="register-form"
+            hx-post="{% url 'sqrt' %}"
+            hx-target="#modal-content-register"
+            hx-swap="innerHTML"
+            class="space-y-4">
+                 {% csrf_token %}
     {% if form.errors %}
     <div class="alert alert-error mb-4">
         <ul>
@@ -17,61 +19,59 @@
         </ul>
     </div>
     {% endif %}
-  <!-- Campos del formulario -->
-    <!-- Username -->
-    <div class="form-control">
-        <label class="label">
-            <span class="label-text">Nombre de usuario</span>
-        </label>
-        {{form.username}}
-    </div>
-              
-                <!-- Email -->
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text">Correo electrónico</span>
+                        <span class="label-text">Nombre Completo</span>
                     </label>
-                                {{form.email}}
+                   {{form.username}}
                 </div>
-               
-                <!-- Password -->
-                <div class="form-control relative">
+                
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Correo Electrónico</span>
+                    </label>
+                    {{form.email}}
+                </div>
+                
+                <div class="form-control">
                     <label class="label">
                         <span class="label-text">Contraseña</span>
                     </label>
                     <div class="relative">
                         {{form.password1}}
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer password-toggle" >
-                            <i class="fas fa-eye text-gray-400"></i>
-                        </div>
+                        <button type="button" class="absolute right-3 top-3 text-gray-400">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
                 </div>
-              
-                <!-- Confirm Password -->
-                <div class="form-control relative">
+                
+                <div class="form-control">
                     <label class="label">
                         <span class="label-text">Confirmar Contraseña</span>
                     </label>
                     <div class="relative">
                         {{form.password2}}
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer password-toggle">
-                            <i class="fas fa-eye text-gray-400"></i>
-                        </div>
-                    </div>
-                </div>
-                            
-                    <!-- Submit Button -->
-                    <div class="form-control mt-6">
-                        <button type="submit" class="btn btn-primary py-3 md:py-3 text-base">
-                            Registrarse
+                        <button type="button" class="absolute right-3 top-3 text-gray-400">
+                            <i class="fas fa-eye"></i>
                         </button>
                     </div>
-</form>
-                                       <!-- Login Link -->
-                        <div class="text-center mt-4">
-                            <span class="text-sm">
-                                ¿Ya tienes cuenta?
-                                <a href="{% url 'login' %}" class="link link-primary ml-1">Iniciar sesión</a>
-                            </span>
-                        </div>
-                   
+                </div>
+                
+                <div class="form-control mt-6">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus mr-2"></i>Registrarse
+                    </button>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-sm text-gray-600">
+                        ¿Ya tienes cuenta? 
+                        <a href="#" class="link link-primary" onclick="switchToLogin()">Iniciar Sesión</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+        

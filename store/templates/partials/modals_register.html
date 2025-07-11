@@ -1,0 +1,70 @@
+<div id="modal-content" class="modal-box w-11/12 max-w-md">
+<form id="register-form"
+    hx-post="{% url 'sqrt' %}"
+    hx-target="#modal-content"
+    hx-swap="innerHTML"
+    class="space-y-4">
+    {% csrf_token %}
+    {% if form.errors %}
+        <div class="alert alert-error mb-4">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Nombre Completo</span>
+        </label>
+        {{form.username}}
+    </div>
+                
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Correo Electrónico</span>
+        </label>
+        {{form.email}}
+    </div>
+                
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Contraseña</span>
+        </label>
+        <div class="relative">
+            {{form.password1}}
+            <button type="button" class="absolute right-3 top-3 text-gray-400">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+    </div>
+                
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Confirmar Contraseña</span>
+        </label>
+        <div class="relative">
+            {{form.password2}}
+            <button type="button" class="absolute right-3 top-3 text-gray-400">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+    </div>
+                
+    <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-user-plus mr-2"></i>Registrarse
+        </button>
+    </div>
+                
+    <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">
+            ¿Ya tienes cuenta? 
+            <a href="#" class="link link-primary" onclick="switchToLogin()">Iniciar Sesión</a>
+        </p>
+    </div>
+    </form>
+</div>      

@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
 {% endblock  %}
 {% block content %}
-<!-- Plantilla para el menú de usuario autenticado (desktop) -->
+   
 <template id="authenticated-desktop-template">
     <div class="dropdown dropdown-end">
         <!-- Botón de avatar (FALTABA ESTE ELEMENTO) -->
@@ -22,8 +22,6 @@
         </ul>
     </div>
 </template>
-
-
 <!-- Plantilla para el menú de usuario autenticado (mobile) -->
 <template id="authenticated-mobile-template">
     <div class="mt-4 pt-4 border-t border-gray-200">
@@ -63,12 +61,12 @@
             </div>
 
             <!-- Botones de autenticación para escritorio -->
-            <div id="desktop-auth-section" class="hidden lg:flex items-center space-x-3">
-                <button class="auth-btn btn btn-outline btn-primary" onclick="modalsRegisterUser.showModal()" >
+           <div id="desktop-auth-section" class="hidden lg:flex items-center space-x-3">
+                <button class="auth-btn btn btn-outline btn-primary" onclick="openRegisterModal()">
                     <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
                 </button>
-                <button class="auth-btn btn btn-primary" >
-                    <i class="fas fa-sign-in-alt mr-2"></i> <a href="{% url "login" %}">Iniciar Sesión</a> 
+                <button class="auth-btn btn btn-primary" onclick="openLoginModal()">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
                 </button>
             </div>
 
@@ -81,7 +79,6 @@
                 </button>
             </div>
         </div>
-
         <!-- Menú desplegable para móviles -->
         <div id="mobile-menu" class="mobile-menu lg:hidden bg-white mt-2 rounded-lg shadow-lg">
             <div class="px-4 py-3 flex flex-col space-y-3">
@@ -91,11 +88,11 @@
                 <a href="#" class="nav-link py-2 px-4 hover:bg-gray-100">Ubicación</a>
                 
                 <div id="mobile-auth-section" class="mt-4 pt-4 border-t border-gray-200 flex flex-col space-y-3">
-                    <button class="auth-btn btn btn-outline btn-primary" onclick="modalsRegisterUser.showModal()">
+                    <button class="auth-btn btn btn-outline btn-primary" onclick="openRegisterModal()">
                         <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
                     </button>
                     <button class="auth-btn btn btn-primary" onclick="openLoginModal()">
-                        <i class="fas fa-sign-in-alt mr-2"></i> <a href="{% url "login" %}">Iniciar Sesión</a>
+                        <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
                     </button>
                 </div>
             </div>
@@ -106,7 +103,7 @@
         <div class="hero-content flex-col lg:flex-row-reverse gap-12">
             <img src="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="max-w-sm rounded-lg shadow-2xl" alt="Productos destacados" />
             <div>
-                <h1 class="text-5xl font-bold">Bienvenido a DULCES SOLUCIONES</h1>
+                <h1 class="text-5xl font-bold">Bienvenido a ECOMMERCE</h1>
                 <p class="py-6 text-lg">Descubre nuestra increíble colección de productos de alta calidad a precios inigualables. ¡Compra con confianza y recibe envío rápido!</p>
                 <button class="btn btn-primary text-white">Explorar Productos</button>
             </div>
@@ -347,67 +344,58 @@
                 </div>
             </div>
         </div>
-    </div>
-<dialog id="modalsRegisterUser" class="modal">
-    <div class="modal-box w-11/12 max-w-3xl">
-        {% comment %} <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="modalsRegisterUser.close()">✕</button> {% endcomment %}
-        <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="modalsRegisterUser.close(); resetRegisterModal();">✕</button>
-
-        <h3 class="font-bold text-lg">Nuevo Usuario</h3>
+    </div> 
+    <!-- Modal de Registro -->
+    <dialog id="registerModal" class="modal">
         
-        <!-- Contenedor dinámico -->
-        <div id="modal-content-register">
-            {% include 'partials/user_register.html' %}
+        <div id="modal-content-register" class="modal-box w-11/12 max-w-md"> 
+                
+                {% include 'partials/user_register.html' %}
+        </div> 
+    </dialog>
+    
+    <!-- Modal de Login -->
+    <dialog id="loginModal" class="modal">
+        <div id="modals-content-login" class="modal-box w-11/12 max-w-md">
+            {% include "partials/login.html" %}
         </div>
-    </div>
-</dialog>  
-<!-- Pie de página -->
-<footer class="footer p-10 bg-base-200 text-base-content">
-    <div>
-        <span class="footer-title">ECOMMERCE</span>
-        <p>Tu tienda online de confianza<br/>Ofreciendo los mejores productos desde 2023</p>
-        <div class="flex gap-4 mt-4">
-            <a><i class="fab fa-facebook text-2xl"></i></a>
-            <a><i class="fab fa-twitter text-2xl"></i></a>
-            <a><i class="fab fa-instagram text-2xl"></i></a>
-            <a><i class="fab fa-pinterest text-2xl"></i></a>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+    
+    <!-- Footer -->
+    <footer class="footer p-10 bg-base-200 text-base-content mt-12">
+        <div>
+            <span class="footer-title">TiendaOnline</span> 
+            <p>Ofreciendo los mejores productos desde 2023</p>
+        </div> 
+        <div>
+            <span class="footer-title">Navegación</span> 
+            <a class="link link-hover">Inicio</a>
+            <a class="link link-hover">Tiendas</a>
+            <a class="link link-hover">Productos</a>
+            <a class="link link-hover">Benjamin</a>
+        </div> 
+        <div>
+            <span class="footer-title">Legal</span> 
+            <a class="link link-hover">Términos de uso</a>
+            <a class="link link-hover">Política de privacidad</a>
+            <a class="link link-hover">Política de cookies</a>
         </div>
-    </div> 
-    <div>
-        <span class="footer-title">Enlaces</span>
-        <a class="link link-hover">Tienda</a>
-        <a class="link link-hover">Productos</a>
-        <a class="link link-hover">Ofertas</a>
-        <a class="link link-hover">Novedades</a>
-    </div> 
-    <div>
-        <span class="footer-title">Soporte</span>
-        <a class="link link-hover">Contacto</a>
-        <a class="link link-hover">FAQs</a>
-        <a class="link link-hover">Política de devoluciones</a>
-        <a class="link link-hover">Términos de uso</a>
-    </div> 
-    <div>
-        <span class="footer-title">Boletín</span>
-        <div class="form-control w-80">
-            <label class="label">
-                <span class="label-text">Suscríbete para recibir ofertas</span>
-            </label> 
-            <div class="relative">
-                <input type="text" placeholder="tu@email.com" class="input input-bordered w-full pr-16" /> 
-                <button class="btn btn-primary absolute top-0 right-0 rounded-l-none">Suscribir</button>
+        <div>
+            <span class="footer-title">Síguenos</span> 
+            <div class="grid grid-flow-col gap-4">
+                <a><i class="fab fa-facebook text-2xl"></i></a>
+                <a><i class="fab fa-instagram text-2xl"></i></a>
+                <a><i class="fab fa-twitter text-2xl"></i></a>
+                <a><i class="fab fa-youtube text-2xl"></i></a>
             </div>
         </div>
-    </div>
-</footer>
-    <!-- Copyright -->
-<footer class="footer footer-center p-4 bg-base-300 text-base-content">
-    <aside>
-        <p>© 2023 ECOMMERCE. Todos los derechos reservados.</p>
-    </aside>
-</footer>
-<script>
-    initPasswordToggles()
+    </footer>
+
+    <script>
+       initPasswordToggles();
      // Funcionalidad de la barra de navegación
         document.addEventListener('DOMContentLoaded', () => {
             // Toggle del menú móvil
@@ -424,110 +412,13 @@
             });
         });
 
-         //JS DEFINIDO
+           //JS DEFINIDO
     const initialModalContent = document.getElementById('modal-content-register').innerHTML;
 
     function resetRegisterModal() {
         document.getElementById('modal-content-register').innerHTML = initialModalContent;
         initPasswordToggles();
     }
-
-    // Inicializar toggles de contraseña
-    function initPasswordToggles() {
-        document.querySelectorAll('.password-toggle').forEach(toggle => {
-            toggle.addEventListener('click', function() {
-                const container = this.closest('.relative');
-                const input = container.querySelector('input');
-                const icon = this.querySelector('i');
-                
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.replace('fa-eye', 'fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.replace('fa-eye-slash', 'fa-eye');
-                }
-            });
-        });
-    }
-
-// Reemplazar el evento existente
-document.body.addEventListener('registrationSuccess', (event) => {
-    const { userAuthenticated, userData } = event.detail;
-    
-    if (userAuthenticated) {
-        updateAuthUI(userData);
-        showNotification(`¡Bienvenido ${userData.first_name || userData.username}!`, 'success');
-    }
-});
-
-
-
-
-// Mostrar notificación
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-md shadow-lg`;
-    notification.innerHTML = `
-        <span>${message}</span>
-        <button class="btn btn-sm btn-circle" onclick="this.parentElement.remove()">✕</button>
-    `;
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 5000);
-}
-
-// Inicializar
-document.addEventListener('DOMContentLoaded', () => {
-    // Manejar cierre del modal
-    modalsRegisterUser.addEventListener('close', () => {
-        // Resetear formulario al cerrar
-        const form = document.getElementById('register-form');
-        if (form) form.reset();
-        
-        // Restaurar contenido original
-        htmx.ajax('GET', '{% url "sqrt" %}', {
-            target: '#modal-content-register',
-            swap: 'innerHTML'
-        });
-    });
-});
-// Dentro del script existente
-/*
-function updateAuthUI(userData) {
-    // 1. Actualizar sección desktop authenticated-desktop-template
-    const desktopTemplate = document.getElementById('authenticated-desktop-template').innerHTML;
-    const desktopHtml = desktopTemplate 
-        .replace('${username}', userData.username)
-        .replace('${email}', userData.email);
-    
-    document.getElementById('desktop-auth-section').innerHTML = desktopHtml;
-    
-    // 2. Actualizar sección mobile
-    const mobileTemplate = document.getElementById('authenticated-mobile-template').innerHTML;
-    const mobileHtml = mobileTemplate
-        .replace('${username}', userData.username)
-        .replace('${email}', userData.email);
-    
-    document.getElementById('mobile-auth-section').innerHTML = mobileHtml;
-    
-    // 3. Actualizar mensaje de bienvenida
-    const welcomeSection = document.querySelector('.hero-content');
-    if (welcomeSection) {
-        welcomeSection.querySelector('h1').textContent = `¡Bienvenido ${userData.first_name || userData.username}!`;
-    }
-    
-    // 4. Cerrar modal de registro
-    modalsRegisterUser.close();
-}
-
-function getInitials(name) {
-    return name.split(' ')
-        .map(part => part[0])
-        .join('')
-        .toUpperCase()
-        .substring(0, 2);
-}
-*/
 function updateAuthUI(userData) {
     // Obtener iniciales del usuario
     const initials = getInitials(userData.first_name || userData.username);
@@ -556,9 +447,8 @@ function updateAuthUI(userData) {
     }
     
     // 4. Cerrar modal de registro
-    modalsRegisterUser.close();
+    registerModal.close();
 }
-
 // Función para obtener iniciales - Asegurarse que existe
 function getInitials(name) {
     return name.split(' ')
@@ -567,7 +457,89 @@ function getInitials(name) {
         .toUpperCase()
         .substring(0, 2);
 }
+// Reemplazar el evento existente
+document.body.addEventListener('registrationSuccess', (event) => {
+    const { userAuthenticated, userData } = event.detail;
+    
+    if (userAuthenticated) {
+        updateAuthUI(userData);
+        showNotification(`¡Bienvenido ${userData.first_name || userData.username}!`, 'success');
+    }
+});
+// Mostrar notificación
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-md shadow-lg`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button class="btn btn-sm btn-circle" onclick="this.parentElement.remove()">✕</button>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 5000);
+}
 
-</script>
-{% endblock  %}
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    // Manejar cierre del modal
+    registerModal.addEventListener('close', () => {
+        // Resetear formulario al cerrar
+        const form = document.getElementById('register-form');
+        if (form) form.reset();
+        
+        // Restaurar contenido original
+        htmx.ajax('GET', '{% url "sqrt" %}', {
+            target: '#modal-content-register',
+            swap: 'innerHTML'
+        });
+    });
+});
 
+        // Funciones para los modales
+        function openRegisterModal() {
+            document.getElementById('registerModal').showModal();
+            document.getElementById('mobile-menu').classList.remove('open');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').close();
+        }
+
+        function openLoginModal() {
+            document.getElementById('loginModal').showModal();
+            document.getElementById('mobile-menu').classList.remove('open');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').close();
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+
+        // Funcionalidad para mostrar/ocultar contraseña
+        function initPasswordToggles() {
+            document.querySelectorAll('.fa-eye').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const input = this.closest('.relative').querySelector('input');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.classList.replace('fa-eye', 'fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        this.classList.replace('fa-eye-slash', 'fa-eye');
+                    }
+                });
+            });
+        }
+
+   
+
+    </script>
+{% endblock %}

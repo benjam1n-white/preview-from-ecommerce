@@ -7,7 +7,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponseForbidden, HttpResponseBadRequest,HttpResponse
 from .forms import LoginForm, CustomUserCreationForm, TiendaForm
@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
-from django.urls import reverse_lazy
+from django.urls import reverse,reverse_lazy
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class TiendaDeleteView(View):
@@ -136,7 +136,7 @@ def tienda_create(request):
 
 
 def index(request):
-    context = {'form':CustomUserCreationForm()}
+    context = {'form':CustomUserCreationForm(), 'formL':LoginForm() }
     if request.user.is_authenticated:
         context['is_authenticated'] = True
     return render(request, 'index.html', context)
@@ -150,15 +150,17 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
-                next_url = request.GET.get('next')
-                if next_url:
-                    return redirect(next_url)
-
-                return redirect('dashboard') 
-        return render(request, 'login.html', {'form': form})
+                if request.headers.get('HX-Request'):
+                    # Para solicitudes HTMX, devolver un script que haga la redirección
+                    response = HttpResponse()
+                    response['HX-Redirect'] = reverse('dashboard')
+                    return response
+                return redirect('dashboard')
+        # Si hay errores o no es HTMX, manejar como antes
+        return render(request, 'login.html', {'formL': form})
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'formL': form})
 
 @method_decorator([never_cache, csrf_protect, require_http_methods(["GET", "POST"])], name='dispatch')
 class Protected(LoginRequiredMixin, View,):
@@ -283,3 +285,10 @@ def register(request):
             return render(request, 'partials/user_register.html', {'form': form})
     
     return HttpResponse("Método no permitido", status=405)
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    response = HttpResponse()
+    response['HX-Redirect'] = reverse('login')  # Redirige a la página de login
+    return response
